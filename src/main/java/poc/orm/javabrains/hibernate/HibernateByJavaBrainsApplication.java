@@ -1,6 +1,9 @@
 package poc.orm.javabrains.hibernate;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -35,11 +38,14 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 		officeAddress.setState("MP");
 		officeAddress.setStreet("Pinto Park 2");
 		
+		Set<Address> setOfAddresses = new HashSet<Address>();
+		setOfAddresses.add(homeAddress);
+		setOfAddresses.add(officeAddress);
+		
 		UserDetails entity = UserDetails.builder()
 				.userId(1)
 				.username("First User")
-				.homeAddress(homeAddress)
-				.officeAddress(officeAddress)
+				.setOfAddresses(setOfAddresses)
 				.description("Test description")
 				.joinedDate(new Date())
 				.build();
