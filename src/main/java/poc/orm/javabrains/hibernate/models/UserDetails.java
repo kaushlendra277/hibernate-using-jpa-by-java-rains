@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,7 +51,7 @@ public class UserDetails {
 	@Lob
 	private String description;
 	
-	@OneToOne // MANDATORY to maintain relationship
+	@OneToOne(fetch = FetchType.LAZY) // MANDATORY to maintain relationship
 	@JoinColumn(name = "vehicle_id") // OPTIONAL , if we want to use some name for join column
 	private Vehicle vehicle;
 }

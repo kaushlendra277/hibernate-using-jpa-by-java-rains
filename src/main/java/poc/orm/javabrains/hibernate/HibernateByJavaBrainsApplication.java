@@ -26,6 +26,9 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	}
 
 	@Override
+	// This is required to fetch Vehicle Lazy (but why ?)
+	// @Transactional 
+	// alternave of @Transactional, we can enable spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 	public void run(String... args) throws Exception {
 		Vehicle vehicleEntity = new Vehicle();
 		vehicleEntity.setVehicleName("car");
