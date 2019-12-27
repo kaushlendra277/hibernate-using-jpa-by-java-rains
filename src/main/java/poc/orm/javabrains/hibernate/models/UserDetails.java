@@ -9,6 +9,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,8 +55,9 @@ public class UserDetails {
 	// it is valid for only some collection i.e. Set, List, Collection
 	// @ElementCollection creates a separate table which has address info and
 	// USERDETAILSENTITY PK as FK in new table
-	@ElementCollection // The ElementCollection values are always stored in a separate table. The table
-						// is defined through the @CollectionTable
+	// The @ElementCollection values are always stored in a separate table. The table
+	// is defined through the @CollectionTable
+	@ElementCollection(fetch = FetchType.LAZY) // Preferred over FetchType.EAGER  
 	// @CollectionTable annotation is useful to give custom name to the table
 	// created
 	// because of @ElementCollection

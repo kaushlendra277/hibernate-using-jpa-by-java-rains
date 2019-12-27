@@ -1,6 +1,5 @@
 package poc.orm.javabrains.hibernate;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,6 +50,10 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 				.build();
 		System.out.println(entity);
 		userDetailsRepository.save(entity);
+		
+		entity = userDetailsRepository.findById(entity.getUserId()).get();
+		System.out.println(entity.getSetOfAddresses().size());
+		System.out.println(entity);
 	}
 
 }
