@@ -1,20 +1,16 @@
 package poc.orm.javabrains.hibernate.models;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Basic;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,24 +46,11 @@ public class UserDetails {
 	// @Temporal(TemporalType.TIME)// save only time as hh:mm:ss
 	@Temporal(value = TemporalType.TIMESTAMP) // save date and time as timestamp as yyyy-mm-dd hh:mm:ss
 	private Date joinedDate;
-
-	// @ElementCollection is used for collection of value (@Embeddable) types
-	// it is valid for only some collection i.e. Set, List, Collection
-	// @ElementCollection creates a separate table which has address info and
-	// USERDETAILSENTITY PK as FK in new table
-	// The @ElementCollection values are always stored in a separate table. The table
-	// is defined through the @CollectionTable
-	@ElementCollection(fetch = FetchType.LAZY) // Preferred over FetchType.EAGER  
-	// @CollectionTable annotation is useful to give custom name to the table
-	// created
-	// because of @ElementCollection
-	@CollectionTable( // Alternatively we can use @JoinTable but @JoinTable has different purpose
-						// refer https://en.wikibooks.org/wiki/Java_Persistence/ElementCollection
-			name = "user_set_address" // name of table where PK of UserDetails is FK // [Optional]
-			, joinColumns = { @JoinColumn(name = "user_id") } // column name of FK // [Optional]
-	)
-	private Set<Address> setOfAddresses;
 	
 	@Lob
 	private String description;
+	
+	@OneToOne // MANDATORY to maintain relationship
+	@JoinColumn(name = "vehicle_id") // OPTIONAL , if we want to use some name for join column
+	private Vehicle vehicle;
 }
