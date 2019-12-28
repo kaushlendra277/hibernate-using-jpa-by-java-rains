@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import poc.orm.javabrains.hibernate.models.UserDetails;
 import poc.orm.javabrains.hibernate.models.Vehicle;
 import poc.orm.javabrains.hibernate.repos.UserDetailsRepository;
-import poc.orm.javabrains.hibernate.repos.VehicleRepository;
 
 @SpringBootApplication
 public class HibernateByJavaBrainsApplication implements CommandLineRunner {
@@ -20,8 +19,8 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
 	
-	@Autowired
-	private VehicleRepository vehicleRepository;
+	//@Autowired
+	//private VehicleRepository vehicleRepository; // commentd since we used cascading in @OneTOMany
 	
 	public static void main(String[] args) {
 		SpringApplication.run(HibernateByJavaBrainsApplication.class, args);
@@ -49,8 +48,8 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 		vehicles.add(vehicleEntity2);
 		
 		userEntity.setVvehicles(vehicles);
-		vehicleRepository.save(vehicleEntity1);
-		vehicleRepository.save(vehicleEntity2);
+		// vehicleRepository.save(vehicleEntity1); // commentd since we used cascading in @OneTOMany
+		// vehicleRepository.save(vehicleEntity2); // commentd since we used cascading in @OneTOMany
 		userDetailsRepository.save(userEntity);
 		
 	}

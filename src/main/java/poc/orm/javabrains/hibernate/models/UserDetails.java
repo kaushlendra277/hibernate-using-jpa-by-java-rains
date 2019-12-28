@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,8 +53,11 @@ public class UserDetails {
 	@Lob
 	private String description;
 	
-	
-	@OneToMany(fetch = FetchType.LAZY) // 1 User many Vehicles 
+	// 1 User many Vehicles
+	@OneToMany(
+			fetch = FetchType.LAZY, 
+			cascade = CascadeType.ALL // this is to cascade operation e.g. we dont need to save contained entity separately , once we save contaer entity contained entity records auto created 
+			)  
 			   // MANDATORY to achive relationship.
 			   // It works same as @ElementCollection but use case is different
 			   // @ElementCOllection works with value (@Embeddable) types where as @OneToMany works with entity (@Entity) types
