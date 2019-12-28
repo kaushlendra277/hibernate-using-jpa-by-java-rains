@@ -1,5 +1,6 @@
 package poc.orm.javabrains.hibernate.models;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -10,8 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -51,7 +53,20 @@ public class UserDetails {
 	@Lob
 	private String description;
 	
-	@OneToOne(fetch = FetchType.LAZY) // MANDATORY to maintain relationship
-	@JoinColumn(name = "vehicle_id") // OPTIONAL , if we want to use some name for join column
-	private Vehicle vehicle;
+	
+	@OneToMany(fetch = FetchType.LAZY) // 1 User many Vehicles 
+			   // MANDATORY to achive relationship.
+			   // It works same as @ElementCollection but use case is different
+			   // @ElementCOllection works with value (@Embeddable) types where as @OneToMany works with entity (@Entity) types
+			   // ****************
+			   // Bydefault it will create a new table whose default name OwnerEntityTableName_OwnedEntityVariableName(USERDETAILSENTITY_vvehicles)
+			   // this new table will have 2 columns , one for UserDetails PK and second for Vehicle PK
+			   // *************
+			   // To configure table name and columns name we use @JoinTable as below
+	@JoinTable( // OPTIONAL
+			name = "user_vehicles", //  name of table
+			joinColumns = {@JoinColumn(name = "user_id")}, // this is used to update column associated with  UserDetails PK
+			inverseJoinColumns = {@JoinColumn (name = "vehicle_id")} // this is used to update column associated with  Vehicle PK
+			)
+	private Collection<Vehicle> vvehicles;
 }

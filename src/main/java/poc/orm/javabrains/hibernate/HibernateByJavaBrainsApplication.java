@@ -1,5 +1,7 @@
 package poc.orm.javabrains.hibernate;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +32,27 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	// @Transactional 
 	// alternave of @Transactional, we can enable spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 	public void run(String... args) throws Exception {
-		Vehicle vehicleEntity = new Vehicle();
-		vehicleEntity.setVehicleName("car");
-		vehicleEntity = vehicleRepository.save(vehicleEntity);
-		
 		UserDetails userEntity = UserDetails.builder()
 				.username("First User")
 				.description("Test description")
 				.joinedDate(new Date())
-				.vehicle(vehicleEntity)
 				.build();
-		System.out.println(userEntity);
-		userEntity = userDetailsRepository.save(userEntity);
 		
-		userEntity = userDetailsRepository.findById(userEntity.getUserId()).get();
-		System.out.println(userEntity);
+		Vehicle vehicleEntity1 = new Vehicle();
+		vehicleEntity1.setVehicleName("car");	
+		
+		Vehicle vehicleEntity2 = new Vehicle();
+		vehicleEntity2.setVehicleName("jeep");
+		
+		Collection<Vehicle> vehicles = new ArrayList<Vehicle>();
+		vehicles.add(vehicleEntity1);
+		vehicles.add(vehicleEntity2);
+		
+		userEntity.setVvehicles(vehicles);
+		vehicleRepository.save(vehicleEntity1);
+		vehicleRepository.save(vehicleEntity2);
+		userDetailsRepository.save(userEntity);
+		
 	}
 
 }
