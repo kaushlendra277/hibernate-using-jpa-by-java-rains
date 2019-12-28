@@ -12,8 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,32 +54,20 @@ public class UserDetails {
 	@Lob
 	private String description;
 	
-	// 1 User many Vehicles
-	@OneToMany(
+	@ManyToMany(
 			fetch = FetchType.LAZY, 
 			cascade = CascadeType.ALL // this is to cascade operation e.g. we dont need to save contained entity separately , once we save contaer entity contained entity records auto created 
 			)  
-			   // MANDATORY to achive relationship.
-			   // It works same as @ElementCollection but use case is different
-			   // @ElementCOllection works with value (@Embeddable) types where as @OneToMany works with entity (@Entity) types
 			   // ****************
 			   // Bydefault it will create a new table whose default name OwnerEntityTableName_OwnedEntityVariableName(USERDETAILSENTITY_vvehicles)
 			   // this new table will have 2 columns , one for UserDetails PK and second for Vehicle PK
 			   // Use @JoinColumn to avoid this 3rd table as shown below
 			   // *************
-			   // To configure table name and columns name we use @JoinTable as below
-	/*
-	@JoinTable( // OPTIONAL
-			name = "user_vehicles", //  name of table
-			joinColumns = {@JoinColumn(name = "user_id")}, // this is used to update column associated with  UserDetails PK
-			inverseJoinColumns = {@JoinColumn (name = "vehicle_id")} // this is used to update column associated with  Vehicle PK
+			   // TO override defult table name and default column name use @JoinTable as shown below
+	@JoinTable(
+			name =  "user_vehicles" // name of table
+			, joinColumns = {@JoinColumn(name = "user_id")} // Column associated with Container Entity 
+			, inverseJoinColumns = {@JoinColumn(name = "vehicle_id")} // Column associated with Contained Entity
 			)
-			*/
-	// Alternative to @JoinTable is @JoinColumn
-	// We use @JoinColumn if we don't want 3rd table
-	@JoinColumn(
-			// IN CASE OF  @OneToMany  this will create a column in containedEntity table(Vehicle) 
-			// IN CASE OF  @ManyToOne  this will create a column in containerEntity table(USERDETAILSTABLE)	
-			name = "user_id") // 
 	private Collection<Vehicle> vvehicles;
 }
