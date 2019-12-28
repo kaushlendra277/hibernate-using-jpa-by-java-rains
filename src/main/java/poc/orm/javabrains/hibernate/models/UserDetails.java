@@ -55,8 +55,7 @@ public class UserDetails {
 	private String description;
 	
 	@ManyToMany(
-			fetch = FetchType.LAZY, 
-			cascade = CascadeType.ALL // this is to cascade operation e.g. we dont need to save contained entity separately , once we save contaer entity contained entity records auto created 
+			fetch = FetchType.LAZY
 			)  
 			   // ****************
 			   // Bydefault it will create a new table whose default name OwnerEntityTableName_OwnedEntityVariableName(USERDETAILSENTITY_vvehicles)

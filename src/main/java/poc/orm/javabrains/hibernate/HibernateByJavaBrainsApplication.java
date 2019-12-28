@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import poc.orm.javabrains.hibernate.models.UserDetails;
 import poc.orm.javabrains.hibernate.models.Vehicle;
 import poc.orm.javabrains.hibernate.repos.UserDetailsRepository;
+import poc.orm.javabrains.hibernate.repos.VehicleRepository;
 
 @SpringBootApplication
 public class HibernateByJavaBrainsApplication implements CommandLineRunner {
@@ -19,8 +20,8 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
 	
-	//@Autowired
-	//private VehicleRepository vehicleRepository; // commentd since we used cascading in @OneTOMany
+	@Autowired
+	private VehicleRepository vehicleRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(HibernateByJavaBrainsApplication.class, args);
@@ -31,8 +32,14 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	// @Transactional 
 	// alternave of @Transactional, we can enable spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 	public void run(String... args) throws Exception {
-		UserDetails userEntity = UserDetails.builder()
+		UserDetails userEntity1 = UserDetails.builder()
 				.username("First User")
+				.description("Test description")
+				.joinedDate(new Date())
+				.build();
+		
+		UserDetails userEntity2 = UserDetails.builder()
+				.username("Second User")
 				.description("Test description")
 				.joinedDate(new Date())
 				.build();
@@ -47,11 +54,14 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 		vehicles.add(vehicleEntity1);
 		vehicles.add(vehicleEntity2);
 		
-		userEntity.setVvehicles(vehicles);
-		// vehicleRepository.save(vehicleEntity1); // commentd since we used cascading in @OneTOMany
-		// vehicleRepository.save(vehicleEntity2); // commentd since we used cascading in @OneTOMany
-		userDetailsRepository.save(userEntity);
-		
+		userEntity1.setVvehicles(vehicles);
+		userEntity2.setVvehicles(vehicles);
+		vehicleRepository.save(vehicleEntity1);
+		vehicleRepository.save(vehicleEntity2);
+		userDetailsRepository.save(userEntity1);
+		userDetailsRepository.save(userEntity2);
+		userEntity1 = userDetailsRepository.findById(userEntity1.getUserId()).get();
+		//System.out.println(userEntity1); // this is thrwoing StackOverFlowException but on debug mode under varaible birectional @ManyToMany is in action
 	}
 
 }
