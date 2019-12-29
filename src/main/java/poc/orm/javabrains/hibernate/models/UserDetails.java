@@ -12,9 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -54,8 +53,9 @@ public class UserDetails {
 	@Lob
 	private String description;
 	
-	@ManyToMany(
-			fetch = FetchType.LAZY
+	@OneToMany(
+			fetch = FetchType.LAZY,
+			cascade = CascadeType.PERSIST
 			)  
 			   // ****************
 			   // Bydefault it will create a new table whose default name OwnerEntityTableName_OwnedEntityVariableName(USERDETAILSENTITY_vvehicles)
@@ -63,10 +63,8 @@ public class UserDetails {
 			   // Use @JoinColumn to avoid this 3rd table as shown below
 			   // *************
 			   // TO override defult table name and default column name use @JoinTable as shown below
-	@JoinTable(
-			name =  "user_vehicles" // name of table
-			, joinColumns = {@JoinColumn(name = "user_id")} // Column associated with Container Entity 
-			, inverseJoinColumns = {@JoinColumn(name = "vehicle_id")} // Column associated with Contained Entity
+	@JoinColumn(
+			name =  "user_id"
 			)
 	private Collection<Vehicle> vvehicles;
 }

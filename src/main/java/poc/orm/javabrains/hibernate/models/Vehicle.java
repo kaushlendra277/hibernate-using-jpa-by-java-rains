@@ -1,18 +1,27 @@
 package poc.orm.javabrains.hibernate.models;
 
-import java.util.Collection;
-
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
 import lombok.ToString;
 
 @ToString
-@Entity
+@Entity(name = "vehicle_entity")
+@Table(name = "vehicle")
+@Inheritance( // OPTIONAL , 
+			  // use this if we want to configure or change default implemention of  inheritence in ORM
+		strategy = InheritanceType.SINGLE_TABLE // table stratgy for inhertence implementtion
+		)
+@DiscriminatorColumn( // OPTIONAL,
+					  // use this to configure dtype column of single-table-stategy
+		name = "vehicle_type" // dtype column name of single able strategy
+		)
 public class Vehicle {
 
 	@Id
@@ -20,12 +29,6 @@ public class Vehicle {
 	private int vehicleId;
 	private String vehicleName;
 	
-	@ManyToMany(
-			mappedBy = "vvehicles", // this is to tell hibernate no need to mainatain this in ContainerEntity, it is alrady mappped
-									// use of maapedBy is to achive bi-directional mapping
-			fetch = FetchType.LAZY
-			)
-	private Collection<UserDetails> users;
 	public int getVehicleId() {
 		return vehicleId;
 	}
@@ -38,12 +41,4 @@ public class Vehicle {
 	public void setVehicleName(String vehicleName) {
 		this.vehicleName = vehicleName;
 	}
-	public Collection<UserDetails> getUsers() {
-		return users;
-	}
-	public void setUsers(Collection<UserDetails> users) {
-		this.users = users;
-	}
-	
-	
 }

@@ -9,10 +9,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import poc.orm.javabrains.hibernate.models.FourWheeler;
+import poc.orm.javabrains.hibernate.models.TwoWheeler;
 import poc.orm.javabrains.hibernate.models.UserDetails;
 import poc.orm.javabrains.hibernate.models.Vehicle;
 import poc.orm.javabrains.hibernate.repos.UserDetailsRepository;
-import poc.orm.javabrains.hibernate.repos.VehicleRepository;
 
 @SpringBootApplication
 public class HibernateByJavaBrainsApplication implements CommandLineRunner {
@@ -20,8 +21,8 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
 	
-	@Autowired
-	private VehicleRepository vehicleRepository;
+	//@Autowired
+	//private VehicleRepository vehicleRepository; // commented since we are using cascading
 	
 	public static void main(String[] args) {
 		SpringApplication.run(HibernateByJavaBrainsApplication.class, args);
@@ -38,30 +39,28 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 				.joinedDate(new Date())
 				.build();
 		
-		UserDetails userEntity2 = UserDetails.builder()
-				.username("Second User")
-				.description("Test description")
-				.joinedDate(new Date())
-				.build();
+		Vehicle vehicle = new Vehicle();
+		vehicle.setVehicleName("vehicle");	
 		
-		Vehicle vehicleEntity1 = new Vehicle();
-		vehicleEntity1.setVehicleName("car");	
+		TwoWheeler bike = new TwoWheeler();
+		bike.setVehicleName("bike");
+		bike.setSteeringHandle("bike steering handle");
 		
-		Vehicle vehicleEntity2 = new Vehicle();
-		vehicleEntity2.setVehicleName("jeep");
+		FourWheeler car = new FourWheeler();
+		car.setVehicleName("car");
+		car.setSteeringWheel("car steering wheel");
+		
+		
 		
 		Collection<Vehicle> vehicles = new ArrayList<Vehicle>();
-		vehicles.add(vehicleEntity1);
-		vehicles.add(vehicleEntity2);
+		vehicles.add(vehicle);
+		vehicles.add(bike);
+		vehicles.add(car);
 		
 		userEntity1.setVvehicles(vehicles);
-		userEntity2.setVvehicles(vehicles);
-		vehicleRepository.save(vehicleEntity1);
-		vehicleRepository.save(vehicleEntity2);
+		// vehicleRepository.save(vehicleEntity1); // commented since we are using cascading 
+		// vehicleRepository.save(vehicleEntity2); // commented since we are using cascading
 		userDetailsRepository.save(userEntity1);
-		userDetailsRepository.save(userEntity2);
-		userEntity1 = userDetailsRepository.findById(userEntity1.getUserId()).get();
-		//System.out.println(userEntity1); // this is thrwoing StackOverFlowException but on debug mode under varaible birectional @ManyToMany is in action
 	}
 
 }
