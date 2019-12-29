@@ -9,6 +9,5 @@ import lombok.Setter;
 @Setter
 @Entity(name = "four_wheeler_entity")
 public class FourWheeler extends Vehicle{
-	
 	private String steeringWheel;
 }

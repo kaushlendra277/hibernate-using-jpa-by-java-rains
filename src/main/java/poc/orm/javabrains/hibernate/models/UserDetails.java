@@ -53,6 +53,8 @@ public class UserDetails {
 	@Lob
 	private String description;
 	
+	// this is commented since we have used @MappedSuper over Vehicle 
+	/*
 	@OneToMany(
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.PERSIST
@@ -67,4 +69,5 @@ public class UserDetails {
 			name =  "user_id"
 			)
 	private Collection<Vehicle> vvehicles;
+	*/
 }

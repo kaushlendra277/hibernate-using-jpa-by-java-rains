@@ -2,7 +2,6 @@ package poc.orm.javabrains.hibernate;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import poc.orm.javabrains.hibernate.models.FourWheeler;
 import poc.orm.javabrains.hibernate.models.TwoWheeler;
-import poc.orm.javabrains.hibernate.models.UserDetails;
 import poc.orm.javabrains.hibernate.models.Vehicle;
 import poc.orm.javabrains.hibernate.repos.UserDetailsRepository;
 import poc.orm.javabrains.hibernate.repos.VehicleRepository;
@@ -35,12 +33,14 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	// alternave of @Transactional, we can enable spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 	public void run(String... args) throws Exception {
 		try {
+			// this is comment Since we are using @MappedSuperclass over Vehicle
+			/*
 			UserDetails userEntity1 = UserDetails.builder()
 					.username("First User")
 					.description("Test description")
 					.joinedDate(new Date())
 					.build();
-			
+			*/
 			Vehicle vehicle = new Vehicle();
 			vehicle.setVehicleName("vehicle");	
 			
@@ -59,10 +59,10 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 			vehicles.add(bike);
 			vehicles.add(car);
 			
-			userEntity1.setVvehicles(vehicles);
+			//userEntity1.setVvehicles(vehicles); // this is comment Since we are using @MappedSuperclass over Vehicle
 			// userDetailsRepository.save(userEntity1); // this is throwing Batch update returned unexpected row count
 			// since above line throwing exception we are persisting vehicle entity
-			vehicleRepository.save(vehicle);  
+			// vehicleRepository.save(vehicle); // this is comment Since we are using @MappedSuperclass over Vehicle
 			vehicleRepository.save(bike);
 			vehicleRepository.save(car);
 			
