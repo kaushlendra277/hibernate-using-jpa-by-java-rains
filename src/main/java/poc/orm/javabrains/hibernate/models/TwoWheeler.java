@@ -22,7 +22,9 @@ import lombok.Setter;
  * 				i.e. if row corrospond to parent entity dtype will have parent entity name and 
  * 				for child entity rows it will have specific child entity name as per the row
  * 
- * * use of DTYPE - as name suggest it will be used to discriminate rows as per specific entity
+ * * use of DTYPE - as name suggest it will be used to discriminate rows as per specific entity.
+ * 
+ * **NOTE**: DTYPE concept is only applicable for "SINGLE TABLE STRATEGY" 
  * */
 /*********************************/
 /**
