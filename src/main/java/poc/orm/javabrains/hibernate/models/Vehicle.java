@@ -21,7 +21,8 @@ public class Vehicle {
 	private String vehicleName;
 	
 	@ManyToMany(
-			mappedBy = "vvehicles", 
+			mappedBy = "vvehicles", // this is to tell hibernate no need to mainatain this in ContainerEntity, it is alrady mappped
+									// use of maapedBy is to achive bi-directional mapping
 			fetch = FetchType.LAZY
 			)
 	private Collection<UserDetails> users;
