@@ -1,6 +1,5 @@
 package poc.orm.javabrains.hibernate.models;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import lombok.Getter;
@@ -31,11 +30,6 @@ import lombok.Setter;
  *  if we want to change the default strategy for implementing inheritence in ORM.
  *  we need to use @Inheritance over the Parent Entity (as shown in Vehicle entity)
  * */
-@DiscriminatorValue( // OPTIONAL,
-					// use this , to change the value of DType column for this child entity
-					// by default dtype column contains entity name corrosponding to the row.
-		value =  "two_wheeler_veh_type"
-		)
 public class TwoWheeler extends Vehicle{
 	private String steeringHandle;
 	

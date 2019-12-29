@@ -1,6 +1,6 @@
 package poc.orm.javabrains.hibernate.models;
 
-import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,16 +16,24 @@ import lombok.ToString;
 @Table(name = "vehicle")
 @Inheritance( // OPTIONAL , 
 			  // use this if we want to configure or change default implemention of  inheritence in ORM
-		strategy = InheritanceType.SINGLE_TABLE // table stratgy for inhertence implementtion
-		)
-@DiscriminatorColumn( // OPTIONAL,
-					  // use this to configure dtype column of single-table-stategy
-		name = "vehicle_type" // dtype column name of single able strategy
+		strategy = InheritanceType.TABLE_PER_CLASS // table stratgy for inhertence implementtion
+		// For Table_per_class strategy there will be 1 table per entity ie. parent entity will have one eparate table
+		// and all childs will have a separate tables 
+		// columns - Parent entity column will have only parent specific columns,
+		//		   - Child entity will have parent columns + child's own specific columns
+		//***********************/
+		/*
+		 * Advantage of TABLE_PER_CLASS over SINGLE_TABLE strategy
+		 * - No need of Dtype column i.e less configuration
+		 * - TABLE_PER_CLASS in more normalised than SINGLE_TABLE as it contains only child specific columns, w/h SINGLE_TABLE has all columns in one table
+		 * */
+		//***********************/
 		)
 public class Vehicle {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "vehicle_id")
 	private int vehicleId;
 	private String vehicleName;
 	
