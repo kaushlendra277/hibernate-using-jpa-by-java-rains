@@ -16,17 +16,22 @@ import lombok.ToString;
 @Table(name = "vehicle")
 @Inheritance( // OPTIONAL , 
 			  // use this if we want to configure or change default implemention of  inheritence in ORM
-		strategy = InheritanceType.TABLE_PER_CLASS // table stratgy for inhertence implementtion
-		// For Table_per_class strategy there will be 1 table per entity ie. parent entity will have one eparate table
+		strategy = InheritanceType.JOINED // table stratgy for inhertence implementtion
+		// For JOINED strategy there will be 1 table per entity ie. parent entity will have one eparate table
 		// and all childs will have a separate tables 
 		// columns - Parent entity column will have only parent specific columns,
-		//		   - Child entity will have parent columns + child's own specific columns
+		//		   - Child entity will parenEntity PK as FK + child's own specific columns
 		//***********************/
 		/*
-		 * Advantage of TABLE_PER_CLASS over SINGLE_TABLE strategy
-		 * - No need of Dtype column i.e less configuration
-		 * - TABLE_PER_CLASS in more normalised than SINGLE_TABLE as it contains only child specific columns, w/h SINGLE_TABLE has all columns in one table
+		 * Advantage of JOINED  over TABLE_PER_CLASS strategy
+		 * - TABLE_PER_CLASS in more normalised than TABLE_PER_CLASS as it contains only child specific columns, w/h TABLE_PER_CLASS has all parent + child's own specific column
+		 * - JOINED and  TABLE_PER_CLASS are doing the same thing but data is kept at different tables, choose as per your use case
 		 * */
+		//***********************/
+		// This is called JOINED strategy because in order to get any child entity
+		// data we need to apply join as 
+		// SELECT * FROM Parent p JOIN Child c ON p.pk = c.fk;
+		// This join is not required for Table-Per_class strategy
 		//***********************/
 		)
 public class Vehicle {
