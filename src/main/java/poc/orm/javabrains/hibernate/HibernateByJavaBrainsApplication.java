@@ -1,27 +1,25 @@
 package poc.orm.javabrains.hibernate;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import poc.orm.javabrains.hibernate.models.FourWheeler;
-import poc.orm.javabrains.hibernate.models.TwoWheeler;
-import poc.orm.javabrains.hibernate.models.Vehicle;
+import poc.orm.javabrains.hibernate.models.UserDetails;
 import poc.orm.javabrains.hibernate.repos.UserDetailsRepository;
-import poc.orm.javabrains.hibernate.repos.VehicleRepository;
 
 @SpringBootApplication
 public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 
 	@Autowired
 	private UserDetailsRepository userDetailsRepository;
-	
-	@Autowired
-	private VehicleRepository vehicleRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(HibernateByJavaBrainsApplication.class, args);
@@ -32,44 +30,66 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 	// @Transactional 
 	// alternave of @Transactional, we can enable spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 	public void run(String... args) throws Exception {
+		// creating records
+		persist();
+		
+		// get User's all column values(i.e. SELECT * ) using HQL in @Query 
+		System.out.println("SELECT * ");
+		List<UserDetails> users = userDetailsRepository.findAllUserDetails(null);
+		System.out.println(users.size());
+		System.out.println(users);
+		
+		// Pagination
+		System.out.println("SELECT * with pagination");
+		Pageable pageable = PageRequest.of(0, 5);
+		users = userDetailsRepository.findAllUserDetails(pageable);
+		System.out.println(users.size());
+		System.out.println(users);
+		
+		pageable = PageRequest.of(1, 5);
+		users = userDetailsRepository.findAllUserDetails(pageable);
+		System.out.println(users.size());
+		System.out.println(users);
+		
+		// SELECT <selected-columns-with-same-type>
+		System.out.println("SELECT u.username, u.description");
+		List<String[]> selectedColumns = userDetailsRepository.findUserNameAndDescriptionOfAllUserDetails();
+		selectedColumns.forEach(s -> System.out.println("username - "+s[0]+" description - " + s[1]));
+		
+		// SELECT <selected-columns-with-different-type>
+		System.out.println("SELECT u.username, u.description");
+		List<Object[]> selectedColumns2 = userDetailsRepository.findUserNameAndUserIdOfAllUserDetails();
+		selectedColumns2.forEach(s -> System.out.println("username datatype - "+s[0].getClass().getName()+" userId datatype - " + s[1].getClass().getName()));
+		selectedColumns2.forEach(s -> System.out.println("username - "+s[0]+" userId - " + s[1]));
+		
+		// [NOTWORKING]
+		/*
+		// SELECT Columns as Map datastucture 
+		System.out.println("SELECT map(u.userId, u.username) ");
+		List<Map<Integer, String>> selectedColumnsMap = userDetailsRepository.findMapOfUserIdAndUserNameOfAllUserDetails();
+		System.out.println(selectedColumnsMap);
+		*/
+	}
+
+	
+	private void persist() throws Exception {
 		try {
-			// this is comment Since we are using @MappedSuperclass over Vehicle
-			/*
-			UserDetails userEntity1 = UserDetails.builder()
-					.username("First User")
-					.description("Test description")
-					.joinedDate(new Date())
-					.build();
-			*/
-			Vehicle vehicle = new Vehicle();
-			vehicle.setVehicleName("vehicle");	
+			List<UserDetails> userEntities = new ArrayList<UserDetails>();
+			for(int i = 1; i<=10; i++) {
 			
-			TwoWheeler bike = new TwoWheeler();
-			bike.setVehicleName("bike");
-			bike.setSteeringHandle("bike steering handle");
+				UserDetails userEntity = UserDetails.builder()
+						.username("First User "+i)
+						.description("Test description")
+						.joinedDate(new Date())
+						.build();
+				userEntities.add(userEntity);
+			}
 			
-			FourWheeler car = new FourWheeler();
-			car.setVehicleName("car");
-			car.setSteeringWheel("car steering wheel");
-			
-			
-			
-			Collection<Vehicle> vehicles = new ArrayList<Vehicle>();
-			vehicles.add(vehicle);
-			vehicles.add(bike);
-			vehicles.add(car);
-			
-			//userEntity1.setVvehicles(vehicles); // this is comment Since we are using @MappedSuperclass over Vehicle
-			// userDetailsRepository.save(userEntity1); // this is throwing Batch update returned unexpected row count
-			// since above line throwing exception we are persisting vehicle entity
-			// vehicleRepository.save(vehicle); // this is comment Since we are using @MappedSuperclass over Vehicle
-			vehicleRepository.save(bike);
-			vehicleRepository.save(car);
+			userDetailsRepository.saveAll(userEntities);
 			
 		}catch(Exception e) {
 			throw e;
 		}
-		
 	}
 
 }

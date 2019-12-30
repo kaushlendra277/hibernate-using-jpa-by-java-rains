@@ -1,19 +1,14 @@
 package poc.orm.javabrains.hibernate.models;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,22 +47,4 @@ public class UserDetails {
 	
 	@Lob
 	private String description;
-	
-	// this is commented since we have used @MappedSuper over Vehicle 
-	/*
-	@OneToMany(
-			fetch = FetchType.LAZY,
-			cascade = CascadeType.PERSIST
-			)  
-			   // ****************
-			   // Bydefault it will create a new table whose default name OwnerEntityTableName_OwnedEntityVariableName(USERDETAILSENTITY_vvehicles)
-			   // this new table will have 2 columns , one for UserDetails PK and second for Vehicle PK
-			   // Use @JoinColumn to avoid this 3rd table as shown below
-			   // *************
-			   // TO override defult table name and default column name use @JoinTable as shown below
-	@JoinColumn(
-			name =  "user_id"
-			)
-	private Collection<Vehicle> vvehicles;
-	*/
 }
