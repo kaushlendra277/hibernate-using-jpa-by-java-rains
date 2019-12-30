@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import poc.orm.javabrains.hibernate.models.UserDetails;
 
@@ -23,6 +24,9 @@ public interface UserDetailsRepository extends PagingAndSortingRepository<UserDe
 	// Here we use Object[] Since username is String but userId is int
 	// String[] will also work but we might need to parse userId to integer
 	List<Object[]> findUserNameAndUserIdOfAllUserDetails();
+	
+	@Query("SELECT u FROM USERDETAILSENTITY u WHERE u.userId = :userId ") 
+	UserDetails findUserDetailsByUserId(@Param("userId") int userId );
 	
 	// [NOTWORKING]
 	// @Query("SELECT map(u.userId, u.username)  FROM USERDETAILSENTITY u")

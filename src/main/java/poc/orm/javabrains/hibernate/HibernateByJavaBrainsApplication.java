@@ -3,7 +3,6 @@ package poc.orm.javabrains.hibernate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -61,6 +60,12 @@ public class HibernateByJavaBrainsApplication implements CommandLineRunner {
 		List<Object[]> selectedColumns2 = userDetailsRepository.findUserNameAndUserIdOfAllUserDetails();
 		selectedColumns2.forEach(s -> System.out.println("username datatype - "+s[0].getClass().getName()+" userId datatype - " + s[1].getClass().getName()));
 		selectedColumns2.forEach(s -> System.out.println("username - "+s[0]+" userId - " + s[1]));
+		
+		// Parameter Binding / Parameter subsitution
+		// SELECT User By User Id
+		System.out.println("SELECT User By User Id");
+		UserDetails user = userDetailsRepository.findUserDetailsByUserId(users.get(0).getUserId());
+		System.out.println(user);
 		
 		// [NOTWORKING]
 		/*
